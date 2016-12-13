@@ -1,10 +1,13 @@
 # Don-tStoop
 
-# 2016-2 Moblie Programming 
+## 2016-2 Moblie Programming 
 
-# Term-Project
+## Term-Project
 
-# 2011136098
-# 2011136099
-# 2011136129
+## Conributors
+### 2011136098
+### 2011136099
+### 2011136129
 
+# INTRODUCE
+- Don-tStoop
