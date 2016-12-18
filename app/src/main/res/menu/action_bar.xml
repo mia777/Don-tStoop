@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+            android:id="@+id/vibe"
+            android:title="VIBRATE"/>
+
+    <item
+            android:id="@+id/sl"
+            android:title="SILENT"/>
+
+    <item
+            android:id="@+id/nm"
+            android:title="NORMAL"/>
+
+</menu>
