@@ -1,6 +1,7 @@
 package kr.ac.koreatech.don_tstoop;
 
 import android.content.Intent;
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,21 +31,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private final int SOUND = 1;
     private final int SILENT = 2;
 
-    private Button mBtnGraph;
-    private TextView mTvSensor;
     private SensorManager mSensorManager;
     private Sensor mProximitySensor;
     private ImageView iv;
     private FileInputStream fis;
 
-    private int mAlarmType = 0;
+    private int mAlarmType = SOUND;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mBtnGraph = (Button) findViewById(R.id.button);
         iv = (ImageView)findViewById(R.id.black);
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mProximitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
@@ -54,9 +52,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             e.printStackTrace();
             iv.setVisibility(View.VISIBLE);
         }
-
-
-
     }
 
     @Override
@@ -110,12 +105,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
 
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
-
             if (event.values[0] == 0.0) {
                 if (!isAliveService(this)) {
                     Intent intent = new Intent(this, StoopAlarmService.class);
@@ -141,7 +134,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void onclick(View v) {
-
         Intent intent = new Intent(this, GraphActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_from_right,R.anim.slide_to_left);

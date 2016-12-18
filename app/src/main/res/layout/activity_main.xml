@@ -5,36 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/black"
-        android:visibility="invisible"
-        android:src="@drawable/ic_volume_off_black_24dp"/>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_linear"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.minho.myapplication.MainActivity">
+    tools:context="kr.ac.koreatech.don_tstoop.MainActivity">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/image"
-        android:src="@drawable/ic_vibration_black_24dp"/>
+        android:src="@drawable/human"/>
 
-    <Button
+    <ImageButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/button"
-        android:text="밀어서 통계창으로"
+        android:src="@drawable/slide"
         android:onClick="onclick"
         android:layout_alignParentBottom="true"
         android:background="#00ffffff"/>
 
 
 </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/black"
+        android:visibility="invisible"
+        android:src="@drawable/base"/>
 
 </FrameLayout>
