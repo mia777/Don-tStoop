@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-            android:id="@+id/vibe"
-            android:title="VIBRATE"/>
+        android:id="@+id/nm"
+        android:title="NORMAL"
+        app:showAsAction="always|withText"
+        android:icon="@drawable/ic_volume_up_black_24dp" />
 
     <item
-            android:id="@+id/sl"
-            android:title="SILENT"/>
+        android:id="@+id/vibe"
+        android:title="VIBRATE"
+        app:showAsAction="always|withText"
+        android:icon="@drawable/ic_vibration_black_24dp"/>
 
     <item
-            android:id="@+id/nm"
-            android:title="NORMAL"/>
-
+        android:id="@+id/sl"
+        android:title="SILENT"
+        app:showAsAction="always|withText"
+        android:icon="@drawable/ic_volume_off_black_24dp"/>
 </menu>

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 
 import android.app.ActivityManager;
@@ -14,8 +15,13 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
@@ -27,18 +33,38 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private TextView mTvSensor;
     private SensorManager mSensorManager;
     private Sensor mProximitySensor;
+    private ImageView iv;
+    private FileInputStream fis;
 
-    private int mAlarmType = SOUND;
+    private int mAlarmType = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mBtnGraph = (Button)findViewById(R.id.button);
-        mTvSensor = (TextView)findViewById(R.id.sensor);
-        mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        mBtnGraph = (Button) findViewById(R.id.button);
+        iv = (ImageView)findViewById(R.id.black);
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mProximitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+
+        try{
+            fis = openFileInput("current.txt");
+        }catch (IOException e){
+            e.printStackTrace();
+            iv.setVisibility(View.VISIBLE);
+        }
+
+
+
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        super.onTouchEvent(event);
+        if(event.getAction()==MotionEvent.ACTION_DOWN)
+        iv.setVisibility(View.INVISIBLE);
+        return true;
     }
 
     @Override
@@ -53,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.vibe:
                 Log.v("ActionBar", "Viberate");
                 mAlarmType = VIBRATE;
@@ -72,27 +98,26 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(this, mProximitySensor,SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mProximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
-    protected  void onPause(){
+    protected void onPause() {
         super.onPause();
         mSensorManager.unregisterListener(this);
     }
 
-    public void onAccuracyChanged(Sensor sensor, int accuracy){
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
 
-    public void onSensorChanged(SensorEvent event){
-        if(event.sensor.getType()==Sensor.TYPE_PROXIMITY){
-            mTvSensor.setText("Distance = "+event.values[0]);
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
 
-            if(event.values[0]==0.0){
-                if(!isAliveService(this)) {
+            if (event.values[0] == 0.0) {
+                if (!isAliveService(this)) {
                     Intent intent = new Intent(this, StoopAlarmService.class);
                     intent.putExtra("STATE", mAlarmType);
                     startService(intent);
@@ -103,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private Boolean isAliveService(Context context) {
         // ActivityManager 객체를 이용해 현재 시스템에서 돌고있는 서비스들의 정보를 가져온다.
-        ActivityManager activityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
         // 현재 시스템에서 돌고있는 서비스들 중에 MusicService가 있다면 true를 반환한다.
         for (ActivityManager.RunningServiceInfo rsi : activityManager.getRunningServices(Integer.MAX_VALUE)) {
@@ -115,10 +140,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         return false;
     }
 
-    public void onclick(View v){
-        if(v.getId() == R.id.button) {
-            Intent intent = new Intent(this, GraphActivity.class);
-            startActivity(intent);
-        }
+    public void onclick(View v) {
+
+        Intent intent = new Intent(this, GraphActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_from_right,R.anim.slide_to_left);
     }
 }

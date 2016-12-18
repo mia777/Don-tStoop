@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/activity_main"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="kr.ac.koreatech.don_tstoop.MainActivity">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/image"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/black"
+        android:visibility="invisible"
+        android:src="@drawable/ic_volume_off_black_24dp"/>
 
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/sensor"/>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_linear"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.minho.myapplication.MainActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/image"
+        android:src="@drawable/ic_vibration_black_24dp"/>
 
     <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/button"
-            android:text="Graph"
-            android:onClick="onclick"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button"
+        android:text="밀어서 통계창으로"
+        android:onClick="onclick"
+        android:layout_alignParentBottom="true"
+        android:background="#00ffffff"/>
 
 
-</LinearLayout>
+</RelativeLayout>
+
+</FrameLayout>

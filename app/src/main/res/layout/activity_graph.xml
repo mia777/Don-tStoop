@@ -27,4 +27,13 @@
             android:id="@+id/chart"></LinearLayout>
 
 
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="밀어서 메인으로"
+            android:id="@+id/ac"
+            android:layout_alignParentBottom="true"
+            android:onClick="onclicked"
+            android:background="#00ffffff"/>
+
 </RelativeLayout>
