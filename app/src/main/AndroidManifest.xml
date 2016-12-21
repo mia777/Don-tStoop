@@ -14,7 +14,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".GraphActivity"></activity>
+        <activity
+                android:name=".GraphActivity"
+                android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
         <service android:name=".StoopAlarmService">
         </service>
     </application>
