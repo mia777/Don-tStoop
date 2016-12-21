@@ -16,7 +16,7 @@
         </activity>
         <activity
                 android:name=".GraphActivity"
-                android:theme="@style/Theme.Design.NoActionBar">
+                android:theme="@style/MyNoActionBar">
         </activity>
         <service android:name=".StoopAlarmService">
         </service>

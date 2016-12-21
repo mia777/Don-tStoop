@@ -1,10 +1,11 @@
 package kr.ac.koreatech.don_tstoop;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,11 @@ import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
-import static  kr.ac.koreatech.don_tstoop.R.id.chart;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import static kr.ac.koreatech.don_tstoop.R.id.chart;
 
 public class TabFragment1 extends Fragment {
 
@@ -29,59 +34,80 @@ public class TabFragment1 extends Fragment {
 
         LinearLayout layout = (LinearLayout)v.findViewById(R.id.chart);
 
-        _chart = ChartFactory.getBarChartView(getActivity(), getBarChartDataset(), getRenderer(), BarChart.Type.DEFAULT);
+        _chart = ChartFactory.getBarChartView(getActivity(), getBarChartDataset (getCurrent()), getRenderer (MAX_Range(getCurrent(),24)), BarChart.Type.DEFAULT);
         layout.addView(_chart);
 
         return v;
     }
 
-    public int[] getCurrent() {
-        int[] arr = new int[24];
+    public int[] getCurrent()
+    {
+        int[] result_arr = new int[24];
 
-        return arr;
+        byte data[] = null;
+        FileInputStream open;
+        String result;
+        try{
+            open = getContext().openFileInput("test.txt");
+            data = new byte[open.available()];
+            while(open.read(data)!=-1) {;}
+            result = new String(data);
+            String[] b = result.split(" ");
+            for(int i=0;i<24;i++)
+            {
+                result_arr[i] = Integer.parseInt(b[i]);
+                Log.i("ddd", String.valueOf(result_arr[i]));
+            }
+            open.close();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return result_arr;
     }
 
-    public XYMultipleSeriesDataset getBarChartDataset() {
+    public int MAX_Range(int[] arr,int length)
+    {
+        int max = 0;
+        for(int i=0;i<length;i++)
+        {
+            if(max <= arr[i])
+                max = arr[i];
+        }
+        return max;
+    }
+
+    public void setCurrent()
+    {
+        String fileName = "test.txt";
+        try{
+            FileOutputStream fos = getContext().openFileOutput(fileName, Context.MODE_PRIVATE);
+            for(int i=0;i<24;i++) {
+                fos.write(String.valueOf(i).getBytes());
+                fos.write(" ".getBytes());
+                Log.i("tag",String.valueOf(i));
+            }
+            fos.close();
+        }catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public XYMultipleSeriesDataset getBarChartDataset(int[] arr) {
         XYMultipleSeriesDataset myData = new XYMultipleSeriesDataset();
         XYSeries dataSeries = new XYSeries("data");
 
-        dataSeries.add(1, 7);
-        dataSeries.add(2, 0);
-        dataSeries.add(3, 7);
-        dataSeries.add(4, 0);
-        dataSeries.add(5, 7);
-        dataSeries.add(7, 8);
-        dataSeries.add(8, 9);
-        dataSeries.add(9, 10);
-        dataSeries.add(10, 7);
-        dataSeries.add(11, 8);
-        dataSeries.add(12, 9);
-        dataSeries.add(13, 7);
-        dataSeries.add(14, 9);
-        dataSeries.add(15, 7);
+        for(int i=0;i<24;i++)
+            dataSeries.add(i,arr[i]);
 
-        /*
-        dataSeries.add(1, 7);
-        dataSeries.add(2, 8);
-        dataSeries.add(3, 9);
-        dataSeries.add(4, 8);
-        dataSeries.add(5, 7);
-        dataSeries.add(6, 6);
-        dataSeries.add(7, 7.1);
-        dataSeries.add(8, 8);
-        dataSeries.add(9, 5);
-        dataSeries.add(10, 5);
-        dataSeries.add(11, 5);
-        dataSeries.add(12, 5);
-        dataSeries.add(13, 5);
-        dataSeries.add(14, 5);
-        dataSeries.add(15, 5);
-        */
+
         myData.addSeries(dataSeries);
         return myData;
     }
 
-    public XYMultipleSeriesRenderer getRenderer() {
+    public XYMultipleSeriesRenderer getRenderer(int _length) {
         XYSeriesRenderer renderer = new XYSeriesRenderer();
 
         renderer.setColor(Color.parseColor("#159aea"));
@@ -89,13 +115,13 @@ public class TabFragment1 extends Fragment {
         XYMultipleSeriesRenderer myRenderer = new XYMultipleSeriesRenderer();
         myRenderer.addSeriesRenderer(renderer);
 
-        myRenderer.setXAxisMin(0);
-        myRenderer.setXAxisMax(10);
+        myRenderer.setXAxisMin(-1);
+        myRenderer.setXAxisMax(24);
         myRenderer.setYAxisMin(0);
-        myRenderer.setYAxisMax(20);
+        myRenderer.setYAxisMax(_length+1);
 
         myRenderer.setXLabels(0);
-        myRenderer.setChartTitle("일일 통계");
+        myRenderer.setChartTitle("일간 통계");
         myRenderer.setChartTitleTextSize(150);
         myRenderer.setXTitle("시간");
         myRenderer.setAxisTitleTextSize(50);
@@ -109,8 +135,8 @@ public class TabFragment1 extends Fragment {
         myRenderer.setShowGridX(true);
         myRenderer.setGridColor(Color.parseColor("#c9c9c9"));
 
-        myRenderer.setPanEnabled(true, false);
-        myRenderer.setPanLimits(new double[]{0, 24, 0, 0});
+        myRenderer.setPanEnabled(false, false);
+        myRenderer.setPanLimits(new double[] {0, 23.5,0, 0});
 
         myRenderer.setShowLegend(true);
 
@@ -129,5 +155,7 @@ public class TabFragment1 extends Fragment {
 
         return myRenderer;
     }
+
 }
+
 
