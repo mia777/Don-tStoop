@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private FileInputStream fis;
 
     private int mAlarmType = SOUND;
+    private int[] mResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         iv = (ImageView)findViewById(R.id.black);
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mProximitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+
+        // 결과 배열 객체 생성
+        mResult = new int[24];
+        for(int i = 0; i < 24; i++) {
+            mResult[i] = 0;
+        }
 
         try{
             fis = openFileInput("current.txt");
@@ -135,6 +142,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     public void onclick(View v) {
         Intent intent = new Intent(this, GraphActivity.class);
+        intent.putExtra("TODAY_RESULT",mResult);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_from_right,R.anim.slide_to_left);
     }
