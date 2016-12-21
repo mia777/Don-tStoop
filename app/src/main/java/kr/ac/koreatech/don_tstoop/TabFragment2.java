@@ -1,6 +1,5 @@
 package kr.ac.koreatech.don_tstoop;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -11,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import android.widget.TextView;
 import org.achartengine.ChartFactory;
 import org.achartengine.chart.BarChart;
 import org.achartengine.model.XYMultipleSeriesDataset;
@@ -19,14 +19,15 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 public class TabFragment2 extends Fragment {
+
+    private static final String TAG = "TAB2";
     View _chart;
+    private int week_sum = 0;
 
     SimpleDateFormat df = new SimpleDateFormat("dd", Locale.KOREA);
     int today = Integer.parseInt(df.format(new Date()));
@@ -37,11 +38,13 @@ public class TabFragment2 extends Fragment {
         View v = inflater.inflate(R.layout.tab_fragment_2,container,false);
 
         if(temp < 0) temp = 0;
-        Log.i("temp",""+temp+","+today);
+        Log.i(TAG,""+temp+","+today);
         LinearLayout layout = (LinearLayout)v.findViewById(R.id.chart2);
 
         _chart = ChartFactory.getBarChartView(getActivity(), getBarChartDataset (getCurrent()), getRenderer (MAX_Range(getCurrent())), BarChart.Type.DEFAULT);
         layout.addView(_chart);
+
+        ((TextView)v.findViewById(R.id.textView2)).setText("총 경고횟수: " + week_sum);
 
         return v;
     }
@@ -49,8 +52,6 @@ public class TabFragment2 extends Fragment {
     public int[] getCurrent()
     {
         int[] result_arr = new int[31];
-
-
 
         byte data[] = null;
         FileInputStream open;
@@ -61,10 +62,15 @@ public class TabFragment2 extends Fragment {
             while(open.read(data)!=-1) {;}
             result = new String(data);
             String[] b = result.split(" ");
+
+            week_sum = 0;
             for(int i=0;i<31;i++)
             {
                 result_arr[i] = Integer.parseInt(b[i]);
-                Log.i("ddd", String.valueOf(result_arr[i]));
+                if(i >= temp && i <= today) {
+                    week_sum += result_arr[i];
+                }
+                Log.i(TAG, String.valueOf(result_arr[i]));
             }
             open.close();
         }

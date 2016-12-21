@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import android.widget.TextView;
 import org.achartengine.ChartFactory;
 import org.achartengine.chart.BarChart;
 import org.achartengine.model.XYMultipleSeriesDataset;
@@ -22,11 +23,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import static kr.ac.koreatech.don_tstoop.R.id.chart;
-
 public class TabFragment1 extends Fragment {
 
+    private static final String TAG = "TAB1";
     View _chart;
+    int day_sum = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class TabFragment1 extends Fragment {
 
         _chart = ChartFactory.getBarChartView(getActivity(), getBarChartDataset (getCurrent()), getRenderer (MAX_Range(getCurrent(),24)), BarChart.Type.DEFAULT);
         layout.addView(_chart);
+        ((TextView)v.findViewById(R.id.textView)).setText("총 경고횟수: " + day_sum);
 
         return v;
     }
@@ -53,10 +55,15 @@ public class TabFragment1 extends Fragment {
             while(open.read(data)!=-1) {;}
             result = new String(data);
             String[] b = result.split(" ");
+
+            day_sum = 0;
             for(int i=0;i<24;i++)
             {
                 result_arr[i] = Integer.parseInt(b[i]);
-                Log.i("ddd", String.valueOf(result_arr[i]));
+                day_sum += result_arr[i];
+
+                Log.i(TAG, "RESULT[" + i + "]: " + String.valueOf(result_arr[i]));
+                Log.d(TAG, "DAY_SUM: " + day_sum);
             }
             open.close();
         }
@@ -86,7 +93,7 @@ public class TabFragment1 extends Fragment {
             for(int i=0;i<24;i++) {
                 fos.write(String.valueOf(i).getBytes());
                 fos.write(" ".getBytes());
-                Log.i("tag",String.valueOf(i));
+                Log.i(TAG,String.valueOf(i));
             }
             fos.close();
         }catch(IOException e)

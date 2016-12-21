@@ -82,7 +82,16 @@ public class GraphActivity extends AppCompatActivity {
 
         int[] temp_arr = new int[31];
         int temp_sum=0;
+        int day_sum=0,week_sum=0,month_sum=0;
+        int temp_minus = today - 7;
+        if(temp_minus < 0) temp_minus = 0;
 
+        for(int i=0;i<24;i++)
+            day_sum += mDayResult[i];
+        for(int i=temp_minus;i<today;i++)
+            week_sum += temp_arr[i];
+        for(int i=0;i<31;i++)
+            month_sum += temp_arr[i];
 
         for(int i=0;i<31;i++)
             temp_arr[i] = 0;
@@ -90,9 +99,13 @@ public class GraphActivity extends AppCompatActivity {
             temp_sum += mDayResult[i];
 
         temp_arr[today-1] = temp_sum;
+        setChekDay(getChekDay());
         setCurrent(getCurrent(), mDayResult);
         setMonth(getMonth(), temp_arr);
 
+        Log.d(TAG, "DAY"+day_sum);
+        Log.d(TAG, "WEEK"+week_sum);
+        Log.d(TAG, "MONTH"+month_sum);
     }
 
     public int[] getMonth()
@@ -119,6 +132,31 @@ public class GraphActivity extends AppCompatActivity {
         {
             for(int i=0;i<31;i++)
                 result_arr[i] = 0;
+
+            /**TEST용 DUMMY DATA **/
+            /*
+            result_arr[0] = 12;
+            result_arr[1] = 51;
+            result_arr[2] = 34;
+            result_arr[3] = 62;
+            result_arr[4] = 52;
+            result_arr[5] = 21;
+            result_arr[6] = 45;
+            result_arr[7] = 17;
+            result_arr[8] = 64;
+            result_arr[9] = 72;
+            result_arr[10] = 21;
+            result_arr[11] = 59;
+            result_arr[12] = 63;
+            result_arr[13] = 12;
+            result_arr[14] = 24;
+            result_arr[15] = 62;
+            result_arr[16] = 91;
+            result_arr[17] = 74;
+            result_arr[18] = 45;
+            result_arr[19] = 26;
+            */
+            /*********************/
             e.printStackTrace();
         }
         return result_arr;
@@ -181,4 +219,51 @@ public class GraphActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    public int getChekDay()
+    {
+        int result_int=0;
+
+        byte data[] = null;
+        FileInputStream open;
+        String result;
+        try{
+            open = openFileInput("checkday.txt");
+            data = new byte[open.available()];
+            while(open.read(data)!=-1) {;}
+            result = new String(data);
+            String[] b = result.split(" ");
+            result_int = Integer.parseInt(b[0]);
+            open.close();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return result_int;
+    }
+    public void setChekDay(int input_result)
+    {
+        String fileName = "checkday.txt";
+        if(input_result != today)
+        {
+            int[] input_arr = new int[24];
+            for(int i=0;i<24;i++)
+                input_arr[i] = 0;
+            setCurrent(input_arr,input_arr);
+        }
+        try{
+            FileOutputStream fos = openFileOutput(fileName, Context.MODE_PRIVATE);
+            fos.write(String.valueOf(today).getBytes());
+            fos.write(" ".getBytes());
+
+            fos.close();
+        }catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 }
+
+

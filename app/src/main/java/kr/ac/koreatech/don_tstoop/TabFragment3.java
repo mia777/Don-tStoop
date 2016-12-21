@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import android.widget.TextView;
 import org.achartengine.ChartFactory;
 import org.achartengine.chart.BarChart;
 import org.achartengine.model.XYMultipleSeriesDataset;
@@ -23,7 +24,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class TabFragment3 extends Fragment {
+
+    private static final String TAG = "TAB3";
     View _chart;
+    private int month_sum = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,6 +37,8 @@ public class TabFragment3 extends Fragment {
 
         _chart = ChartFactory.getBarChartView(getActivity(), getBarChartDataset(getCurrent()), getRenderer(MAX_Range(getCurrent(), 31)), BarChart.Type.DEFAULT);
         layout.addView(_chart);
+
+        ((TextView)v.findViewById(R.id.textView3)).setText("총 경고횟수: " + month_sum);
 
         return v;
     }
@@ -51,9 +57,12 @@ public class TabFragment3 extends Fragment {
             }
             result = new String(data);
             String[] b = result.split(" ");
+
+            month_sum = 0;
             for (int i = 0; i < 31; i++) {
                 result_arr[i] = Integer.parseInt(b[i]);
-                Log.i("ddd", String.valueOf(result_arr[i]));
+                month_sum += result_arr[i];
+                Log.i(TAG, String.valueOf(result_arr[i]));
             }
             open.close();
         } catch (Exception e) {
@@ -79,7 +88,7 @@ public class TabFragment3 extends Fragment {
             for (int i = 0; i < 31; i++) {
                 fos.write(String.valueOf(i).getBytes());
                 fos.write(" ".getBytes());
-                Log.i("tag", String.valueOf(i));
+                Log.i(TAG, String.valueOf(i));
             }
             fos.close();
         } catch (IOException e) {
