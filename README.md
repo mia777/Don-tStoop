@@ -1,4 +1,4 @@
-- # Don-tStoop
+# Don-tStoop
 
 2016 - 2 Koreatech Mobile Mobile Programming Term Project
 
